@@ -1,12 +1,14 @@
 #include "utils.h"
 
+char* abecedario = 'abcdefghijklmnñopqrstuvwxyz';
 
 int strLen(char* src) {
-   while (src[len] != 0)
-   {
-       len++;
-   }
-   return len;
+    int len = 0;
+    while (src[len] != 0)
+    {
+        len++;
+    }
+    return len;
 }
 
 
@@ -40,13 +42,33 @@ struct keysPredict* keysPredictNew() {
     return kt;
 }
 
+struct node* nodeNew(char character){
+    struct node* n = (struct node*)malloc(sizeof(struct node));
+    n->character = character;
+    n->next = NULL;
+    n->end = 0;
+    n->word = NULL;
+    n->down = NULL;
+    return n;
+}
 
 void keysPredictAddWord(struct keysPredict* kt, char* word) {
+    struct node* newNode = addSortedNewNodeInLevel( , word[0])
 
+    int i = 1; //nos salteamos el primer caracter ya que ya lo pusimo en su respectiva posicion entre los primeros nodos (osea como los del mismo nivel)
 
-    // COMPLETAR
+    while (i < strLen(word))
+    {
+        struct node* nodoDown = nodeNew(word[i]);
+        newNode->down = nodoDown;
+        newNode = nodoDown;
+        i++;
+    }
 
+    
 
+    kt->totalKeys += strLen(word);
+    kt->totalWords += 1;
 }
 
 
@@ -136,16 +158,31 @@ struct node* findNodeInLevel(struct node** list, char character) {
             characterPasado = list;
         }
     }
-
     return 0;
 }
 
 
 struct node* addSortedNewNodeInLevel(struct node** list, char character) {
-
-
-    // COMPLETAR
-
+    struct node* nodo1 = nodeNew(character);
+    
+    //nodo->character = character;
+    
+    if (kt->first = NULL || kt->first->character > character) //nos fijamos si la lista esta vacia o si el nuevo nodo deberia ser el primero en orden alfabetico
+    {
+        nodo1->next = kt->first;
+        kt-> fisrt = nodo1;
+    }
+    
+    else
+    {
+        struct node* actualNode = keys->first;
+        while (actual->next != NULL && actual->next->character < character)
+        {
+            actual = actual->next;
+        }
+        nodo1->next = actual->next;
+        actualNode->next = nodo1;
+    }
 
     return 0;
 }
