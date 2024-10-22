@@ -130,9 +130,14 @@ void keysPredictPrintAux(struct node* n, int level) {
 
 
 struct node* findNodeInLevel(struct node** list, char character) {
-   struct node* findNodeInLevel(struct node** list, char character){
-   
-   }
+    char* characterPasado;
+    while(list){ //no habria que poner list->next asi para que termine cuando next=0? 
+        if (list->character == character){
+            characterPasado = list;
+        }
+    }
+
+    return 0;
 }
 
 
@@ -147,7 +152,11 @@ struct node* addSortedNewNodeInLevel(struct node** list, char character) {
 
 
 void deleteArrayOfWords(char** words, int wordsCount) {
-
-
-    // COMPLETAR
+    char* current = words;
+    for (int i = 0; i < wordsCount; i++){
+        char* tmp;
+        tmp = current;
+        current = current->next
+        free(tmp);
+    }   
 }
