@@ -1,7 +1,5 @@
 #include "utils.h"
 
-char* abecedario = 'abcdefghijklmnñopqrstuvwxyz';
-
 int strLen(char* src) {
     int len = 0;
     while (src[len] != 0)
@@ -11,28 +9,26 @@ int strLen(char* src) {
     return len;
 }
 
+char* strDup(char* src) { //fijarse si agregar eso de que no hay espacio disponible que me mande por whatsapp
 
-char* strDup(char* src) {
-    int length = strLen(src) * 2;
-    char* duplicado = (char*)malloc(sizeof(char)*(length+1));
-    duplicado = src;
-    for (int j=0; i<length; i++)
-    {
-        int lengthWord = strLen(src[i])
-        for (int k=0; i<lengthWord; i++)
-        {
-            duplicado[lengthWord] = src[j][k]
-            lengthWord++;
-        }
+  int length = strLen(src)*2+1; //sumamos uno por el caracter nulo
+  char* srcDup = (char*)malloc(sizeof(char)*(length+1));
+  
+  int indexDup = 0;
+  
+  for (int i = 0; i<2; i++){
+    int currLen = strLen(src);
+    for (int j = 0; j<currLen; j++){
+      srcDup[indexDup] = src[j];
+      indexDup++;  
     }
-    duplicado[lengthWord] = 0; //ponemos el caracter nulo en el ultimo caracter para indicar que finalizo el string
+  }
 
-    return duplicado;
+  srcDup[indexDup] = 0; //agregamos el caracter nulo para indicar la finalizacion de nuestro srcDup
+  return srcDup;
 }
 
-
 // Keys Predict
-
 
 struct keysPredict* keysPredictNew() {
     struct keysPredict* kt = (struct keysPredict*)malloc(sizeof(struct keysPredict));
@@ -65,7 +61,7 @@ void keysPredictAddWord(struct keysPredict* kt, char* word) {
         i++;
     }
 
-    
+
 
     kt->totalKeys += strLen(word);
     kt->totalWords += 1;
@@ -152,12 +148,19 @@ void keysPredictPrintAux(struct node* n, int level) {
 
 
 struct node* findNodeInLevel(struct node** list, char character) {
-    char* characterPasado;
-    while(list){ //no habria que poner list->next asi para que termine cuando next=0? 
-        if (list->character == character){
-            characterPasado = list;
-        }
+    if (*list == NULL){ //verificamos si la lista esta vacia
+      return 0;
     }
+    else{
+      struct node* curr = *list;
+      while (curr != NULL){
+        if(curr->character == character){
+          return curr;
+        }
+        curr = curr->next; //como nuestra nueva froma de hacer i++;
+      }
+    }
+    
     return 0;
 }
 
@@ -196,4 +199,56 @@ void deleteArrayOfWords(char** words, int wordsCount) {
         current = current->next
         free(tmp);
     }   
+}
+
+//#####################################################################################
+
+int main() {
+  /*
+  1)1)
+  int len = strLen("hola");
+  printf("strLen devuelve %i", len);
+  printf("\n");
+  
+  1)2)
+  char* dup = strDup("hola");
+  printf("strDup devuelve %s", dup);
+  
+  free(dup);
+  return 0;
+  
+  
+  2)1)
+  struct keysPredict* kt = keysPredictNew();
+  kt->first = nodeNew('a');
+  kt->first->next = nodeNew('b');
+  kt->first->next->next = nodeNew('c');
+
+  // Caso 1: Nodo existe en la lista
+  struct node* nodoEncontrado = findNodeInLevel(&(kt->first), 'a');
+  if (nodoEncontrado != NULL) {
+      printf("Nodo encontrado con caracter '%c'\n", nodoEncontrado->character);
+  } else {
+      printf("Nodo no encontrado\n");
+  }
+
+  // Caso 2: Nodo no existe en la lista
+  nodoEncontrado = findNodeInLevel(&(kt->first), 'd');
+  if (nodoEncontrado != NULL) {
+      printf("Nodo encontrado con caracter '%c'\n", nodoEncontrado->character);
+  } else {
+      printf("Nodo no encontrado\n");
+  }
+
+  // Caso 3: Lista vacía
+  struct node* listaVacia = NULL;
+  nodoEncontrado = findNodeInLevel(&listaVacia, 'a');
+  if (nodoEncontrado != NULL) {
+      printf("Nodo encontrado con caracter '%c'\n", nodoEncontrado->character);
+  } else {
+      printf("Nodo no encontrado\n");
+  }
+
+  return 0;
+  */
 }
