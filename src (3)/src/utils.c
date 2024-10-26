@@ -11,21 +11,15 @@ int strLen(char* src) {
 
 char* strDup(char* src) { //fijarse si agregar eso de que no hay espacio disponible que me mande por whatsapp
 
-  int length = strLen(src)*2+1; //sumamos uno por el caracter nulo
-  char* srcDup = (char*)malloc(sizeof(char)*(length+1));
+  int length = strLen(src);
+  char* dup = (char*)malloc(sizeof(char)*(length)+1)
   
-  int indexDup = 0;
-  
-  for (int i = 0; i<2; i++){
-    int currLen = strLen(src);
-    for (int j = 0; j<currLen; j++){
-      srcDup[indexDup] = src[j];
-      indexDup++;  
-    }
+  for(int i = 0; i < length; i++){
+    dup[i] = src[i];
   }
-
-  srcDup[indexDup] = 0; //agregamos el caracter nulo para indicar la finalizacion de nuestro srcDup
-  return srcDup;
+  
+  dup[length] = 0;
+  return dup;
 }
 
 // Keys Predict
@@ -49,22 +43,40 @@ struct node* nodeNew(char character){
 }
 
 void keysPredictAddWord(struct keysPredict* kt, char* word) {
-    struct node* newNode = addSortedNewNodeInLevel( , word[0])
+    struct node* curr = kt->first; //empezamos por el primer nodo
+    char first = curr->character;
 
-    int i = 1; //nos salteamos el primer caracter ya que ya lo pusimo en su respectiva posicion entre los primeros nodos (osea como los del mismo nivel)
-
-    while (i < strLen(word))
+    for (int i = 0; i < strLen(word); i++)
     {
-        struct node* nodoDown = nodeNew(word[i]);
-        newNode->down = nodoDown;
-        newNode = nodoDown;
-        i++;
+      struct node* found = findNodeInLevel(&curr, word[i])
+      if(found != 0) //se encontro{
+        curr = curr->down;
+        if(i==strLen(word)-1)//si ya agregamos todas las letras de word...
+        {
+          new->end=1;// ponemos que este el nodo final de nuestra word
+          new->word = strDup(word) //agregamos la palabra completa a word
+        }
+        
+      }
+      else //si no se encontro el caracter lo agregamos
+      {
+        kt->totalKeys++; //agregamos 1 del caracter nuevo que agregamos
+        struct node* new = addSortedNewNodeInLevel(&curr, word[i]); //agregamos el nuevo caracter donde corresponde
+        curr = curr->down; //despues de agregar la letra en su nivel correspondiente, bajamos de nivel
+      
+        if (i==0 && word[i] < first) //en caso de que sea la primer letra hasta ahora hacemos que el frist apunte a este nodo
+        {
+          kt->first = new;
+        }
+        
+        if(i==strLen(word)-1)//si ya agregamos todas las letras de word...
+        {
+          new->end=1;// ponemos que este el nodo final de nuestra word
+          new->word = strDup(word) //agregamos la palabra completa a word
+        }
+      
     }
-
-
-
-    kt->totalKeys += strLen(word);
-    kt->totalWords += 1;
+  
 }
 
 
@@ -159,46 +171,40 @@ struct node* findNodeInLevel(struct node** list, char character) {
         }
         curr = curr->next; //como nuestra nueva froma de hacer i++;
       }
+      return 0;
     }
-    
-    return 0;
 }
 
 
 struct node* addSortedNewNodeInLevel(struct node** list, char character) {
-    struct node* nodo1 = nodeNew(character);
+    struct node* newNode = nodeNew(character);
     
-    //nodo->character = character;
-    
-    if (kt->first = NULL || kt->first->character > character) //nos fijamos si la lista esta vacia o si el nuevo nodo deberia ser el primero en orden alfabetico
+    if (*list == NULL || (*list)->character > character) //nos fijamos si la lista esta vacia o si el nuevo nodo deberia ser el primero en orden alfabetico
     {
-        nodo1->next = kt->first;
-        kt-> fisrt = nodo1;
+        newNode->next = *list;
+        *list = newNode;
     }
     
     else
     {
-        struct node* actualNode = keys->first;
-        while (actual->next != NULL && actual->next->character < character)
+        struct node* curr = *list; //empezamos con el primer nodo
+        while (curr->next != NULL && curr->next->character < character)
         {
-            actual = actual->next;
+            curr = curr->next;
         }
-        nodo1->next = actual->next;
-        actualNode->next = nodo1;
+        newNode->next = curr->next;
+        curr->next = newNode;
     }
 
-    return 0;
+    return *list;
 }
 
 
 void deleteArrayOfWords(char** words, int wordsCount) {
-    char* current = words;
     for (int i = 0; i < wordsCount; i++){
-        char* tmp;
-        tmp = current;
-        current = current->next
-        free(tmp);
-    }   
+      free(words[i]);
+    }
+    free(words);
 }
 
 //#####################################################################################
@@ -250,5 +256,31 @@ int main() {
   }
 
   return 0;
+  
+  2)2)
+      // Crear una lista vacía
+    struct node* list = NULL;
+
+    // Agregar nodos a la lista
+    list = addSortedNewNodeInLevel(&list, 'b');
+    list = addSortedNewNodeInLevel(&list, 'a');
+    list = addSortedNewNodeInLevel(&list, 'c');
+    list = addSortedNewNodeInLevel(&list, 'd');
+    list = addSortedNewNodeInLevel(&list, 'a');
+    list = addSortedNewNodeInLevel(&list, 'b');
+
+    // Imprimir la lista para verificar que esté correcta
+    while (list != NULL) {
+        printf("%c ----- ", list->character);
+        list = list->next;
+    }
+    printf("NULL\n");
+
+    return 0;
+    
+    
+    2)3)
+    ----------
+
   */
 }
