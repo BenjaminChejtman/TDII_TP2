@@ -82,9 +82,10 @@ void keysPredictAddWord(struct keysPredict* kt, char* word) {
     //despues de agregar la palabra, en caso de ser una nueva, aumentamos en uno la cantidad de totalKeys
     if(cantkeysfBefore < kt->totalKeys) //nos fijamos si ahora tenemos mas nodos en cualquier nivel en total, lo que nos indicara que se necesito alguna letra para agregar una palabra nueva, si esto no se cumple significa que la palabra ya estaba porque no se agrego ningun nodo en ningun nivel
     {
-        kt->totalWords++;
+      kt->totalWords++;
     }
 }
+
 
 
 
@@ -131,27 +132,78 @@ struct node* keysPredictFind(struct keysPredict* kt, char* word) {
         if (curr->down != NULL) // si hay nivel inferior
         { 
           curr = findNodeInLevel(&curr->down, word[i+1]);
-        } 
+        }
+        else //no hay nivel inferior, entonces, palabra no encontrada
+        {
+          return 0;
+        }
       } 
       else // si es la última letra
       { 
-        if (curr->word != 0) 
+        if (curr->word == word && curr->end == 1) 
         {
           return curr;
         }
+        else //si no hay palabra en word, entonces, palabra no encontrada
+        {
+          return 0;
+        }
       }
     } 
+    else //no se encuentra la letra, entonces palabra no encontrada
+    {
+      return 0;
+    }
   }
+  return 0; //salio del bucle y no encontro la palabra
 }
 
 
 char** keysPredictRun(struct keysPredict* kt, char* partialWord, int* wordsCount) {
 
-
-    // COMPLETAR
-
-
-    return 0;
+  struct node* curr = kt->first;
+  char** = (char**)malloc(sizeof(char*(*char)*wordsCount*strLen())) //cual seria el size que tendriamos que pedir?
+  
+  for(int i = 0; i < strLen(partialWord); i++)
+  {
+    struct node* found = findNodeInLevel(&curr, word[i]);
+    if (found != 0) //si se encontro...
+    {
+      curr = found; // avanzar al nodo encontrado
+      if (i < strLen(word) - 1) // si no es la última letra
+      { 
+        if (curr->down != NULL) // si hay nivel inferior
+        { 
+          curr = findNodeInLevel(&curr->down, word[i+1]);
+        }
+        else //no hay nivel inferior, entonces, palabra no encontrada
+        {
+          return 0;
+        }
+      } 
+      else // si es la última letra
+      { 
+        curr = curr->down;
+        if(curr->end == 1) //si no hay una palabra completa...
+        {
+          struct node* currLevel = curr; //mantenemos el nivel original para poder ver todos sus down
+          foundWords += curr->word; 
+          curr = curr->next;
+        }
+        else //si no hay una palabra completa...
+        {
+          
+        }
+            
+      }
+      }
+    } 
+    else //no se encuentra la letra, entonces palabra no encontrada
+    {
+      return 0;
+    }
+  
+  return 0; //salio del bucle y no encontro la palabra
 }
 
 
