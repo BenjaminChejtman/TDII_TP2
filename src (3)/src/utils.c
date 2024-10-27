@@ -45,11 +45,13 @@ struct node* nodeNew(char character){
 void keysPredictAddWord(struct keysPredict* kt, char* word) {
     struct node* curr = kt->first; //empezamos por el primer nodo
     char first = curr->character;
+    int cantkeysfBefore = kt->totalKeys;
 
     for (int i = 0; i < strLen(word); i++)
     {
       struct node* found = findNodeInLevel(&curr, word[i])
-      if(found != 0) //se encontro{
+      if(found != 0) //si se encontro...
+      {
         curr = curr->down;
         if(i==strLen(word)-1)//si ya agregamos todas las letras de word...
         {
@@ -74,26 +76,72 @@ void keysPredictAddWord(struct keysPredict* kt, char* word) {
           new->end=1;// ponemos que este el nodo final de nuestra word
           new->word = strDup(word) //agregamos la palabra completa a word
         }
-      
+      }
     }
-  
+    
+    //despues de agregar la palabra, en caso de ser una nueva, aumentamos en uno la cantidad de totalKeys
+    if(cantkeysfBefore < kt->totalKeys) //nos fijamos si ahora tenemos mas nodos en cualquier nivel en total, lo que nos indicara que se necesito alguna letra para agregar una palabra nueva, si esto no se cumple significa que la palabra ya estaba porque no se agrego ningun nodo en ningun nivel
+    {
+        kt->totalWords++;
+    }
 }
 
 
+
 void keysPredictRemoveWord(struct keysPredict* kt, char* word) {
-
-
-    // COMPLETAR
+  struct node* curr = kt->first;
+  
+  for(int i = 0; i < strLen(word); i++)
+  {
+    struct node* found = findNodeInLevel(&curr, word[i]);
+    if (found != 0) //si se encontro...
+    {
+      curr = found; // avanzar al nodo encontrado
+      if (i < strLen(word) - 1) // si no es la última letra
+      { 
+        if (curr->down != NULL) // si hay nivel inferior
+        { 
+          curr = findNodeInLevel(&curr->down, word[i+1]);
+        } 
+      } 
+      else // si es la última letra
+      { 
+        if (curr->word != 0) 
+        {
+          curr->word = deleteArrayOfWords(&curr->word, strLen(curr->word));
+          curr->end = 0;
+        }
+      }
+    } 
+  }
 }
 
 
 struct node* keysPredictFind(struct keysPredict* kt, char* word) {
-
-
-    // COMPLETAR
-
-
-    return 0;
+  struct node* curr = kt->first;
+  
+  for(int i = 0; i < strLen(word); i++)
+  {
+    struct node* found = findNodeInLevel(&curr, word[i]);
+    if (found != 0) //si se encontro...
+    {
+      curr = found; // avanzar al nodo encontrado
+      if (i < strLen(word) - 1) // si no es la última letra
+      { 
+        if (curr->down != NULL) // si hay nivel inferior
+        { 
+          curr = findNodeInLevel(&curr->down, word[i+1]);
+        } 
+      } 
+      else // si es la última letra
+      { 
+        if (curr->word != 0) 
+        {
+          return curr;
+        }
+      }
+    } 
+  }
 }
 
 
