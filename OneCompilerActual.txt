@@ -245,50 +245,70 @@ char** keysPredictRun(struct keysPredict* kt, char* partialWord, int* wordsCount
 }
 
 char** keysPredictListAll(struct keysPredict* kt, int* wordsCount) {
-  wordsCount = 0;
-  charr ** res = NULL;
   
-  keyPredictListAll2(kt->first, wwordsCount, &res);
+  *wordsCount = keyPredictListAllCountWords(kt->first);
+  char** res = (char**)malloc(sizeof(char*)*(*wordsCount));
+  
+  if(!res) return NULL; //verificamos asignacion de memoria
+  
+  int i = 0;
+  keyPredictListAllAux(kt->first, &res, &i);
   
   return res;
 }
 
-void keyPredictListAll2(struct node* node, int* wordsCount, charr** res){
+int keyPredictListAllCountWords(struct node* node){
+  struct node* curr = node;
+  int wordsCount = 0;
   
-  char** res = (char**)malloc(sizeof(char)*wordsCount);
-  
-  if(node->end == 1 && node->word != NULL){
-    wordsCount++;
-    res[wordsCount-1] = strDup(node->word);
+  if(!node){
+    return wordsCount;
   }
   
-  keysPredictListAll2(n->next, wordsCount, res);
-  keysPredictListAll2(n->down, wordsCount, res);
+  while(curr){
+    if(curr->end == 1){
+      wordsCount++;
+    }
+    wordsCount += keyPredictListAllCountWords(curr->down);
+    curr = curr->next;
+  }
+  
+  return wordsCount;
 }
 
-void keysPredictDelete(struct keysPredict* kt) {
-  struct node* curr = kt->first;
+void keyPredictListAllAux(struct node* node, char** res, int* i){
+  struct node* curr = node;
   
-  if(curr->word != 0)
-  {
-    curr->word = free(curr->word);
-  }
+  if(!node) return;
   
-  if(curr->down == 0 && end == 1)
-  {
-    if(curr->next == NULL && curr-down == NULL)
-    {
-      free(curr)
+  while(curr){
+    if(curr->end == 1){
+      (*res)[*i] = strDup(curr->word);
+      (*i)++;
     }
-    else
-    {
-      curr=curr->next;  
-    }
+    keyPredictListAllAux(curr->down, res, i);
+    curr = curr->next;
   }
-  else 
-  {
-    
-  }
+}
+
+void keysPredictDelete(struct keysPredict* kt)
+{
+  if(!kt) return;
+  
+  keysPredictDeleteAux(kt->first);
+  kt->first = NULL;
+}
+
+void keysPredictDeleteAux(struct node* node)
+{
+  if(!node) return;
+   keysPredictDeleteAux(node->down);
+   keysPredictDeleteAux(node->next);
+   
+   if (node->word != null){
+     free(node->word);
+   }
+   free(node)
 }
 
 
