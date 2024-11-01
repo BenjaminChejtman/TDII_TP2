@@ -147,13 +147,16 @@ void keysPredictAddWord(struct keysPredict* kt, char* word) {
 
 void keysPredictRemoveWord(struct keysPredict* kt, char* word) {
   struct node* curr = kt->first;
-
+  if(kt->first == 0 || word == NULL){
+    return;  
+  }
+  
   for(int i = 0; i < strLen(word); i++)
   {
 
     struct node* found = findNodeInLevel(&curr, word[i]);
     printf("1");
-    
+
     if (found != NULL) //si se encontro...
     {
       printf("2");
@@ -171,15 +174,19 @@ void keysPredictRemoveWord(struct keysPredict* kt, char* word) {
       else // si es la última letra
       { 
         printf("5");
-        if (found->word != NULL) 
+        if (found->word != NULL && strLen(found->word) == strLen(word))
         {
           printf("6");
-          //free(found->word);
-          found->word = NULL;
+          free(found->word);
+          printf("%s\n", found->word);
+          //found->word = NULL;
           found->end = 0;
           kt->totalWords--;
         }
+      
       }
+      //printf("la palabra enocntrada es: %s\n", found->word);
+      //free(found->word);
     } 
     else //si no se encontro
     {
@@ -407,19 +414,26 @@ int main() {
     2)3)
     ----------
 
-  3)2)
+  
+  
   */
+
+  
+  
+  //3)2)
+  
   struct keysPredict* kt = keysPredictNew();
-  struct node* node = nodeNew(*"s");
-  struct node* node2 = nodeNew(*"i");
-  struct node* node3 = nodeNew(*"n");
-  struct node* node4 = nodeNew(*"o");
+  struct node* node = nodeNew(*"n");
+  struct node* node2 = nodeNew(*"o");
+  struct node* node3 = nodeNew(*"s");
+  struct node* node4 = nodeNew(*"i");
 
   node2->end = 1;
-  node2->word = "si";
+  node2->word = strDup("nose");
   node4->end = 1;
-  node4->word = "no";
-
+  node4->word = strDup("no");
+  printf("%s", node4->word);
+    
   kt->first = node;
   node->down = node2;
 
@@ -429,31 +443,36 @@ int main() {
   kt->totalWords = 2;
   kt->totalKeys = 4;
 
+  keysPredictAddWord(kt, "tal");
+  int wordsCount = keyPredictListAllCountWords(kt->first);
+  keysPredictListAll(kt, &wordsCount);
+  printf("\ntenemos %c\n", node3->next->character);
   
   
   //3)3)
   
+
   printf("antes teniamos: %i\n", kt->totalWords);
   printf("las palabras que teniamos son: '%s' y '%s'\n", node2->word, node4->word);
 
-  //keysPredictRemoveWord(kt, "no");
+  keysPredictRemoveWord(kt, "no");
   //struct node* found1 = findNodeInLevel(&node2, (*"i"));
   //printf("se encontro: %c", found1->character);
 
   printf("ahora tenemos: %i\n", kt->totalWords);
   printf("las palabras que tenemos ahora son: '%s' y '%s'\n", node2->word, node4->word);
 
-  
-  
-  
+
+
+
 
   //3)4) keypredictfind
 
-  
+
   //struct node* encontrado = keysPredictFind(kt, "si");
   //printf("la palabra 'si' fue encontrada, find devuelve: %s", encontrado->word);
 
-  
+
 
   //3)6)
  // int wordsCount = keyPredictListAllCountWords(kt->first);
@@ -461,14 +480,14 @@ int main() {
   //for(int i = 0; i < wordsCount; i++){
    // printf("\nlas palabras que se encontraron fueron: %s", palabras[i]);
  // }
-  
+
 
 //3)7)
-keysPredictDelete(kt);
-printf("despues de borrar tenemos: %i", kt->totalWords);  //devuleve munmap_chunk(): invalid pointer, es porque se borro correctamente? Muy probablemente si, preguntar.
-  printf("despues de borrar tenemos: %c", node->character); //con todos tira el mismo errro, por lo que muy probablemente significa que es porque se borro bien.
-  printf("despues de borrar tenemos: %c", node2->character);
-  printf("despues de borrar tenemos: %c", node3->character);
-  printf("despues de borrar tenemos: %s", node4->word);
+//keysPredictDelete(kt);
+//printf("despues de borrar tenemos: %i", kt->totalWords);  //devuleve munmap_chunk(): invalid pointer, es porque se borro correctamente? Muy probablemente si, preguntar.
+  //printf("despues de borrar tenemos: %c", node->character); //con todos tira el mismo errro, por lo que muy probablemente significa que es porque se borro bien.
+  //printf("despues de borrar tenemos: %c", node2->character);
+  //printf("despues de borrar tenemos: %c", node3->character);
+  //printf("despues de borrar tenemos: %s", node4->word);
 return 0;
 }
