@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "utils.h"
 
-
 void predictAndPrintAll(struct keysPredict* kt, char* partialWord ) {
     char** words;
     int wordsCount;
